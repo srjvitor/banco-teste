@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Transfer } from 'src/transfers-management/transfers/transfer.model';
+import { Transfer } from "src/transfers-management/transfers/transfer.model";
 import { Client } from '../clients/client.model';
 import { Account } from "./account.model";
 import { CreateAccountDto } from './dto/create-account.dto'

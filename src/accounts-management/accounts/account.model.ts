@@ -1,5 +1,5 @@
 import { BelongsTo, Column, CreatedAt, DeletedAt, ForeignKey, HasMany, Model, Table, UpdatedAt } from 'sequelize-typescript';
-import { Transfer } from 'src/transfers-management/transfers/transfer.model';
+import { Transfer } from "src/transfers-management/transfers/transfer.model";
 import { Client } from '../clients/client.model';
 
 @Table

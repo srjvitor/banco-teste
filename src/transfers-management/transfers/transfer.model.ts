@@ -6,17 +6,17 @@ export class Transfer extends Model {
 
   @ForeignKey(() => Account)
   @Column
-  contaOrigemId: number
+  contaOrigemId: number;
 
   @BelongsTo(() => Account, 'contaOrigemId')
-  contaOrigem: Account
+  contaOrigem: Account;
 
   @ForeignKey(() => Account)
   @Column
-  contaDestinoId: number
+  contaDestinoId: number;
 
   @BelongsTo(() => Account, 'contaDestinoId')
-  contaDestino: Account
+  contaDestino: Account;
 
   @Column
   saldo: number;

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Transfer } from './transfer.model';
+import { Transfer } from "./transfer.model";
 import { CreateTransferDto } from './dto/create-transfer.dto'
 import { UpdateTransferDto } from './dto/update-transfer.dto'
 import { Account } from 'src/accounts-management/accounts/account.model';
@@ -17,7 +17,7 @@ export class TransfersService {
 
   async create(createTransferDto: CreateTransferDto): Promise<Transfer | String> {
 
-    const contaOrigem = await this.accountModel.findOne({
+    let contaOrigem = await this.accountModel.findOne({
       where: {
         id: createTransferDto.contaOrigemId
       }
@@ -27,7 +27,7 @@ export class TransfersService {
       return "Conta de origem inválida."
     }
 
-    const contaDestino = await this.accountModel.findOne({
+    let contaDestino = await this.accountModel.findOne({
       where: {
         id: createTransferDto.contaDestinoId
       }
@@ -40,11 +40,9 @@ export class TransfersService {
     if (contaOrigem.saldo > 0 && createTransferDto.saldo <= contaOrigem.saldo) {
 
       contaOrigem.saldo -= createTransferDto.saldo;
-      console.log(createTransferDto.saldo)
       await contaOrigem.save()
 
-      contaDestino.saldo += createTransferDto.saldo;
-      console.log(createTransferDto.saldo)
+      contaDestino.saldo =+ createTransferDto.saldo;
       await contaDestino.save()
 
       return this.transferModel.create(createTransferDto);

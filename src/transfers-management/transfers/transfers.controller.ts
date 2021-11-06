@@ -1,5 +1,5 @@
 import { Controller, Param, Get, Post, Put, Delete, Body } from '@nestjs/common';
-import { Transfer } from './transfer.model';
+import { Transfer } from "./transfer.model";
 import { TransfersService } from './transfers.service'
 import { CreateTransferDto } from './dto/create-transfer.dto'
 import { UpdateTransferDto } from './dto/update-transfer.dto'
