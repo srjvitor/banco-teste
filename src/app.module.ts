@@ -1,9 +1,13 @@
 import { Module } from '@nestjs/common';
 import { AppService } from './app.service';
-import { GerenciamentoContasModule } from './gerenciamento-contas/gerenciamento-contas.module';
-import { TransferenciasContasModule } from './transferencias-contas/transferencias-contas.module';
-import { BoletosBancariosModule } from './boletos-bancarios/boletos-bancarios.module';
+import { AccountsModule } from './accounts-management/accounts.module';
+import { TransfersModule } from './transfer-smanagement/transfers.module';
+import { SlipsModule } from './slips-management/slips.module';
 import { SequelizeModule } from '@nestjs/sequelize';
+
+import { Client } from './accounts-management/clients/client.model';
+import { Account } from "./accounts-management/accounts/account.model";
+import { Transfer } from './transfer-smanagement/transfers/transfer.model';
 
 @Module({
   imports: [
@@ -13,12 +17,12 @@ import { SequelizeModule } from '@nestjs/sequelize';
       port: 5432,
       username: 'postgres',
       password: '123',
-      database: 'postgres',
-      models: [],
+      database: 'banco',
+      models: [Client, Account, Transfer],
     }),
-    GerenciamentoContasModule,
-    TransferenciasContasModule,
-    BoletosBancariosModule
+    AccountsModule,
+    TransfersModule,
+    SlipsModule
   ],
   controllers: [],
   providers: [AppService],
