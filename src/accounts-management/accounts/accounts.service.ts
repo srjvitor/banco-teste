@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { Transfer } from 'src/transfers-management/transfers/transfer.model';
+import { Client } from '../clients/client.model';
 import { Account } from "./account.model";
 import { CreateAccountDto } from './dto/create-account.dto'
 import { UpdateAccountDto } from './dto/update-account.dto'
@@ -17,7 +19,16 @@ export class AccountsService {
 
   async findAll(): Promise<Account[] | String> {
     let accounts = await this.accountModel.findAll({
-      order: ['id']
+      order: ['id'],
+      include: [Client,
+      {
+        model: Transfer,
+        as: 'transferenciasEfetuadas'
+      },
+      {
+        model: Transfer,
+        as: 'transferenciasRecebidas'
+      }]
     });
 
     if (accounts.length) {
@@ -31,7 +42,8 @@ export class AccountsService {
     let account = await this.accountModel.findOne({
       where: {
         id: id
-      }
+      },
+      include: [Client]
     });
 
     if (account) {

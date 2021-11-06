@@ -1,5 +1,5 @@
 import { BelongsTo, Column, CreatedAt, DeletedAt, ForeignKey, HasMany, Model, Table, UpdatedAt } from 'sequelize-typescript';
-import { Transfer } from 'src/transfer-smanagement/transfers/transfer.model';
+import { Transfer } from 'src/transfers-management/transfers/transfer.model';
 import { Client } from '../clients/client.model';
 
 @Table
@@ -33,6 +33,9 @@ export class Account extends Model {
   @BelongsTo(() => Client)
   cliente: Client;
 
-  @HasMany(() => Transfer)
-  transferencias: Transfer[];
+  @HasMany(() => Transfer, 'contaDestinoId')
+  transferenciasRecebidas: Transfer[];
+
+  @HasMany(() => Transfer, 'contaOrigemId')
+  transferenciasEfetuadas: Transfer[];
 }

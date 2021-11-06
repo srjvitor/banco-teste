@@ -9,12 +9,12 @@ export class TransfersController {
   constructor(private transfersService: TransfersService) { }
 
   @Post()
-  create(@Body() createTransferDto: CreateTransferDto): Promise<Transfer> {
+  create(@Body() createTransferDto: CreateTransferDto): Promise<Transfer | String> {
     return this.transfersService.create(createTransferDto);
   }
 
   @Get()
-  async findAll(): Promise<Transfer[]> {
+  async findAll(): Promise<Transfer[] | String> {
     return this.transfersService.findAll();
   }
 

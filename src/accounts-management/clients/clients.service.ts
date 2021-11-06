@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { Account } from '../accounts/account.model';
 import { Client } from './client.model';
 import { CreateClientDto } from './dto/create-client.dto'
 import { UpdateClientDto } from './dto/update-client.dto'
@@ -15,37 +16,60 @@ export class ClientsService {
     return this.clientModel.create(createClientDto);
   }
 
-  async findAll(): Promise<Client[]> {
-    return this.clientModel.findAll({
-      order: ['id']
+  async findAll(): Promise<Client[] | String> {
+    let clients = await this.clientModel.findAll({
+      order: ['id'],
+      include: [Account]
     });
+
+    if (clients.length) {
+      return clients;
+    } else {
+      return "Nenhum cliente cadastrado."
+    }
   }
 
-  async findOne(id: number): Promise<Client> {
-    return this.clientModel.findOne({
+  async findOne(id: number): Promise<Client | String> {
+    let client = await this.clientModel.findOne({
       where: {
         id: id
-      }
+      },
+      include: [Account]
     });
+
+    if (client) {
+      return client;
+    } else {
+      return "Conta não localizada."
+    }
   }
 
-  async update(id: number, updateClientDto: UpdateClientDto): Promise<Client> {
+  async update(id: number, updateClientDto: UpdateClientDto): Promise<Client | String> {
     let client = await this.clientModel.findOne({
       where: {
         id: id
       }
     });
 
-    return client.update(updateClientDto);
+    if (client) {
+      return client.update(UpdateClientDto)
+    } else {
+      return "Falha ao atualizar cliente, conta não localizada."
+    }
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: number): Promise<void | String> {
     const client = await this.clientModel.findOne({
       where: {
         id: id
       }
     });
 
-    await client.destroy();
+    if (client) {
+      await client.destroy();
+      return "Cliente excluido com sucesso."
+    } else {
+      return "Falha ao excluir cliente, conta não foi encontrada."
+    }
   }
 }

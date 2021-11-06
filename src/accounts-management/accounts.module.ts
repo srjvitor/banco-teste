@@ -13,6 +13,7 @@ import { Account } from "./accounts/account.model";
 @Module({
   imports: [SequelizeModule.forFeature([Client, Account])],
   controllers: [ClientsController, AccountsController],
-  providers: [ClientsService, AccountsService]
+  providers: [ClientsService, AccountsService],
+  exports: [SequelizeModule]
 })
 export class AccountsModule {}

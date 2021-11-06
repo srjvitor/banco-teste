@@ -14,7 +14,7 @@ export class ClientsController {
   }
 
   @Get()
-  async findAll(): Promise<Client[]> {
+  async findAll(): Promise<Client[] | String> {
     return this.clientsService.findAll();
   }
 
