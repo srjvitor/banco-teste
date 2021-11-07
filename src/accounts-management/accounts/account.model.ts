@@ -1,25 +1,30 @@
-import { BelongsTo, Column, CreatedAt, DeletedAt, ForeignKey, HasMany, Model, Table, UpdatedAt } from 'sequelize-typescript';
-import { Transfer } from "src/transfers-management/transfers/transfer.model";
-import { Client } from '../clients/client.model';
+import { BelongsTo, Column, CreatedAt, DeletedAt, ForeignKey, HasMany, Model, NotEmpty, Table, UpdatedAt } from 'sequelize-typescript';
+import { TransferModel } from "src/transfers-management/transfers/transfer.model";
+import { ClientModel } from '../clients/client.model';
 
 @Table
-export class Account extends Model {
+export class AccountModel extends Model {
 
-  @ForeignKey(() => Client)
+  @NotEmpty
+  @ForeignKey(() => ClientModel)
   @Column
   clienteId: number;
-
+  
+  @NotEmpty
   @Column
   banco: string;
-
+  
+  @NotEmpty
   @Column
   agencia: string;
-
+  
+  @NotEmpty
   @Column
   conta: string;
-
+  
+  @NotEmpty
   @Column
-  saldo: number;
+  saldo: string;
 
   @CreatedAt
   createdAt: Date;
@@ -30,12 +35,12 @@ export class Account extends Model {
   @DeletedAt
   deletedAt: Date;
 
-  @BelongsTo(() => Client)
-  cliente: Client;
+  @BelongsTo(() => ClientModel)
+  cliente: ClientModel;
 
-  @HasMany(() => Transfer, 'contaDestinoId')
-  transferenciasRecebidas: Transfer[];
+  @HasMany(() => TransferModel, 'contaDestinoId')
+  transferenciasRecebidas: TransferModel[];
 
-  @HasMany(() => Transfer, 'contaOrigemId')
-  transferenciasEfetuadas: Transfer[];
+  @HasMany(() => TransferModel, 'contaOrigemId')
+  transferenciasEfetuadas: TransferModel[];
 }

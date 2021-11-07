@@ -1,34 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Transfer } from "src/transfers-management/transfers/transfer.model";
-import { Client } from '../clients/client.model';
-import { Account } from "./account.model";
+import { TransferModel } from "src/transfers-management/transfers/transfer.model";
+import { TransferTypeModel } from "src/transfers-management/transfer-types/transfer-type.model";
+import { ClientModel } from '../clients/client.model';
+import { AccountModel } from "./account.model";
 import { CreateAccountDto } from './dto/create-account.dto'
 import { UpdateAccountDto } from './dto/update-account.dto'
 
 @Injectable()
 export class AccountsService {
   constructor(
-    @InjectModel(Account)
-    private accountModel: typeof Account,
+    @InjectModel(AccountModel)
+    private accountModel: typeof AccountModel,
   ) { }
 
-  async create(createAccountDto: CreateAccountDto): Promise<Account> {
+  async create(createAccountDto: CreateAccountDto): Promise<AccountModel> {
     return this.accountModel.create(createAccountDto);
   }
 
-  async findAll(): Promise<Account[] | String> {
+  async findAll(): Promise<AccountModel[] | String> {
     let accounts = await this.accountModel.findAll({
       order: ['id'],
-      include: [Client,
-      {
-        model: Transfer,
-        as: 'transferenciasEfetuadas'
-      },
-      {
-        model: Transfer,
-        as: 'transferenciasRecebidas'
-      }]
+      include: [ClientModel]
     });
 
     if (accounts.length) {
@@ -38,12 +31,28 @@ export class AccountsService {
     }
   }
 
-  async findOne(id: number): Promise<Account | String> {
+  async findOne(id: number): Promise<AccountModel | String> {
     let account = await this.accountModel.findOne({
       where: {
         id: id
       },
-      include: [Client]
+      include: [
+        ClientModel,
+        {
+          model: TransferModel,
+          as: 'transferenciasEfetuadas',
+          include: [
+            TransferTypeModel
+          ]
+        },
+        {
+          model: TransferModel,
+          as: 'transferenciasRecebidas',
+          include: [
+            TransferTypeModel
+          ]
+        }
+      ]
     });
 
     if (account) {
@@ -53,7 +62,7 @@ export class AccountsService {
     }
   }
 
-  async update(id: number, updateAccountDto: UpdateAccountDto): Promise<Account | String> {
+  async update(id: number, updateAccountDto: UpdateAccountDto): Promise<AccountModel | String> {
     let account = await this.accountModel.findOne({
       where: {
         id: id

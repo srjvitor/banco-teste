@@ -7,11 +7,11 @@ import { AccountsController } from './accounts/accounts.controller';
 import { ClientsService } from './clients/clients.service';
 import { AccountsService } from './accounts/accounts.service';
 
-import { Client } from './clients/client.model';
-import { Account } from "./accounts/account.model";
+import { ClientModel } from './clients/client.model';
+import { AccountModel } from "./accounts/account.model";
 
 @Module({
-  imports: [SequelizeModule.forFeature([Client, Account])],
+  imports: [SequelizeModule.forFeature([ClientModel, AccountModel])],
   controllers: [ClientsController, AccountsController],
   providers: [ClientsService, AccountsService],
   exports: [SequelizeModule]
