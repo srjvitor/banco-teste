@@ -34,10 +34,18 @@ $ npm install
 
 ## Rodando as migrations do Sequelize
 
-Navegue até a pasta "database" e rode o comando abaixo
+Navegue até a pasta "src/database" e rode o comando abaixo
 
 ```bash
 $ npx sequelize-cli db:migrate
+```
+## Rodando as seeds do Sequelize
+
+Seeds criadas para adicionar os tipos de transferências ao banco.<br>
+Navegue até a pasta "src/database" e rode o comando abaixo
+
+```bash
+$ npx sequelize-cli db:seed:all
 ```
 
 ## Rodando a aplicação
