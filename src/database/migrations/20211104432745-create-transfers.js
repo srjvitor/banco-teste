@@ -1,34 +1,44 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Accounts', {
+    await queryInterface.createTable('Transfers', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      clienteId: {
+      tipoTransferenciaId: {
         type: Sequelize.DataTypes.INTEGER,
         references: {
           model: {
-            tableName: 'Clients'
+            tableName: 'TransferTypes'
           },
           key: 'id'
         },
         allowNull: false
       },
-      banco: {
-        type: Sequelize.STRING
+      contaOrigemId: {
+        type: Sequelize.DataTypes.INTEGER,
+        references: {
+          model: {
+            tableName: 'Accounts'
+          },
+          key: 'id'
+        }
       },
-      agencia: {
-        type: Sequelize.STRING
-      },
-      conta: {
-        type: Sequelize.STRING
+      contaDestinoId: {
+        type: Sequelize.DataTypes.INTEGER,
+        references: {
+          model: {
+            tableName: 'Accounts'
+          },
+          key: 'id'
+        },
+        allowNull: false
       },
       saldo: {
-        type: Sequelize.DECIMAL(10, 2)
+        type: Sequelize.DECIMAL(10, 2) 
       },
       createdAt: {
         allowNull: false,
@@ -44,6 +54,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Accounts');
+    await queryInterface.dropTable('Transfers');
   }
 };
