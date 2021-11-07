@@ -64,12 +64,12 @@ Cadastro de cliente - [POST] /clientes
 
 {
   "nome": string,
-	"cpf": string,
-	"dataNascimento": Date,
-	"nomePai": string | null,
-	"nomeMae": string,
-	"cidade": string,
-	"estado": string
+  "cpf": string,
+  "dataNascimento": Date,
+  "nomePai": string,
+  "nomeMae": string,
+  "cidade": string,
+  "estado": string
 }
 
 Lista de todos os clientes - [GET] /clientes
@@ -80,12 +80,12 @@ Atualização de dados de cliente - [PUT]: /clientes/{idCliente: number}
 
 {
   "nome": string (Opcional),
-	"cpf": string (Opcional),
-	"dataNascimento": Date (Opcional),
-	"nomePai": string | null (Opcional),
-	"nomeMae": string (Opcional),
-	"cidade": string (Opcional),
-	"estado": string (Opcional)
+  "cpf": string (Opcional),
+  "dataNascimento": Date (Opcional),
+  "nomePai": string | null (Opcional),
+  "nomeMae": string (Opcional),
+  "cidade": string (Opcional),
+  "estado": string (Opcional)
 }
 
 Exclusão de cadastro de cliente - [Delete]: /clientes/{idCliente: number}
@@ -98,7 +98,7 @@ Exclusão de cadastro de cliente - [Delete]: /clientes/{idCliente: number}
 Cadastro de conta - [POST] /contas
 
 {
-	"clienteId": number,
+  "clienteId": number,
   "banco": string,
   "agencia": string,
   "conta": string,
@@ -112,7 +112,7 @@ Listagem única de conta e transferências - [GET]: /contas/{idConta: number}
 Atualização de dados de conta - [PUT]: /contas/{idConta: number}
 
 {
-	"clienteId": number (Opcional),
+  "clienteId": number (Opcional),
   "banco": string (Opcional),
   "agencia": string (Opcional),
   "conta": string (Opcional)
@@ -130,11 +130,33 @@ Cadastro de transferência - [POST] /transferencias
 Tipos de transferências
 1. Transferências entre contas
 2. Deposito em conta
-3. Deposito teste
+3. Deposito teste (1 centavo, independente do saldo enviado)
 
 {
-	"tipoTransferenciaId": number,
-	"contaOrigemId": number (null em caso de depositos),
+  "tipoTransferenciaId": number,
+  "contaOrigemId": number (null em caso de depositos),
+  "contaDestinoId": number,
+  "saldo": string
+}
+
+```
+```bash
+## Boletos
+
+Cadastro de boleto - [POST] /boletos
+
+{
+  "tipoTransferenciaId": number,
+  "contaOrigemId": number (null em caso de depositos),
+  "contaDestinoId": number,
+  "saldo": string
+}
+
+Consulta de boleto - [GET] /boletos
+
+{
+  "tipoTransferenciaId": number,
+  "contaOrigemId": number (null em caso de depositos),
   "contaDestinoId": number,
   "saldo": string
 }
