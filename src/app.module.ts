@@ -16,7 +16,6 @@ import { TransfersModule } from './transfers-management/transfers.module';
       password: '123',
       database: 'banco',
       autoLoadModels: true,
-      synchronize: true,
     }),
     AccountsModule,
     TransfersModule,

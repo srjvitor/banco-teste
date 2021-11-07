@@ -1,8 +1,8 @@
 import { Column, CreatedAt, DeletedAt, HasMany, Model, Table, UpdatedAt } from 'sequelize-typescript';
-import { TransferModel } from "../transfers/transfer.model";
+import { Transfer } from "../transfers/transfer.model";
 
 @Table
-export class TransferTypeModel extends Model {
+export class TransferType extends Model {
 
   @Column
   descricao: string;
@@ -16,6 +16,6 @@ export class TransferTypeModel extends Model {
   @DeletedAt
   deletedAt: Date;
 
-  @HasMany(() => TransferModel)
-  contas: TransferModel[]
+  @HasMany(() => Transfer)
+  contas: Transfer[]
 }

@@ -1,26 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { TransferModel } from "./transfer.model";
-import { TransferTypeModel } from '../transfer-types/transfer-type.model';
+import { Transfer } from "./transfer.model";
+import { TransferType } from '../transfer-types/transfer-type.model';
 import { CreateTransferDto } from './dto/create-transfer.dto'
-import { AccountModel } from 'src/accounts-management/accounts/account.model';
+import { Account } from 'src/accounts-management/accounts/account.model';
 
 @Injectable()
 export class TransfersService {
   constructor(
-    @InjectModel(TransferModel)
-    private transferModel: typeof TransferModel,
+    @InjectModel(Transfer)
+    private transfer: typeof Transfer,
 
-    @InjectModel(TransferTypeModel)
-    private transferTypeModel: typeof TransferTypeModel,
+    @InjectModel(TransferType)
+    private transferType: typeof TransferType,
 
-    @InjectModel(AccountModel)
-    private accountModel: typeof AccountModel
+    @InjectModel(Account)
+    private account: typeof Account
   ) { }
 
-  async create(createTransferDto: CreateTransferDto): Promise<TransferModel | String> {
+  async create(createTransferDto: CreateTransferDto): Promise<Transfer | String> {
 
-    let tipoTransferencia = await this.transferTypeModel.findOne({
+    var tipoTransferencia = await this.transferType.findOne({
       where: {
         id: createTransferDto.tipoTransferenciaId
       }
@@ -31,7 +31,7 @@ export class TransfersService {
     }
 
     if (createTransferDto.tipoTransferenciaId == 1) {
-      var contaOrigem = await this.accountModel.findOne({
+      var contaOrigem = await this.account.findOne({
         where: {
           id: createTransferDto.contaOrigemId
         }
@@ -42,7 +42,7 @@ export class TransfersService {
       }
     }
 
-    let contaDestino = await this.accountModel.findOne({
+    let contaDestino = await this.account.findOne({
       where: {
         id: createTransferDto.contaDestinoId
       }
@@ -54,24 +54,32 @@ export class TransfersService {
 
     let saldoTransferencia = parseFloat(createTransferDto.saldo);
 
-    // Transferência entre contas
-    if (createTransferDto.tipoTransferenciaId == 1) {
-      var saldoOrigem = parseFloat(contaOrigem.saldo);
+    switch (createTransferDto.tipoTransferenciaId) {
+      case 1:
+        var saldoOrigem = parseFloat(contaOrigem.saldo);
 
-      if (saldoOrigem == 0 && saldoTransferencia > saldoOrigem) {
-        return 'Saldo insuficiente para transferência.' 
-      }
+        if (saldoOrigem == 0 && saldoTransferencia > saldoOrigem) {
+          return 'Saldo insuficiente para transferência.'
+        }
 
-      saldoOrigem = saldoOrigem - saldoTransferencia;
-      contaOrigem.saldo = saldoOrigem.toString();
-      await contaOrigem.save()
+        saldoOrigem = saldoOrigem - saldoTransferencia;
+        contaOrigem.saldo = saldoOrigem.toString();
+        await contaOrigem.save()
+        break;
+      case 2:
+        var saldoDestino = parseFloat(contaDestino.saldo);
+        saldoDestino += saldoTransferencia;
+        contaDestino.saldo = saldoDestino.toString();
+        await contaDestino.save()
+        break;
+
+      case 3:
+        var saldoDestino = parseFloat('00.01');
+        saldoDestino = saldoDestino + saldoTransferencia;
+        contaDestino.saldo = saldoDestino.toString();
+        break;
     }
 
-    var saldoDestino = parseFloat(contaDestino.saldo);
-    saldoDestino = saldoDestino + saldoTransferencia;
-    contaDestino.saldo = saldoDestino.toString();
-    await contaDestino.save()
-
-    return this.transferModel.create(createTransferDto);
+    return this.transfer.create(createTransferDto);
   }
 }

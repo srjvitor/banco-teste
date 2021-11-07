@@ -1,30 +1,30 @@
 import { BelongsTo, Column, CreatedAt, DeletedAt, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript';
-import { AccountModel } from "../../accounts-management/accounts/account.model";
-import { TransferTypeModel } from "../transfer-types/transfer-type.model";
+import { Account } from "../../accounts-management/accounts/account.model";
+import { TransferType } from "../transfer-types/transfer-type.model";
 
 @Table
-export class TransferModel extends Model {
+export class Transfer extends Model {
 
-  @ForeignKey(() => TransferTypeModel)
+  @ForeignKey(() => TransferType)
   @Column
   tipoTransferenciaId: number;
 
-  @BelongsTo(() => TransferTypeModel)
-  tipoTransferencia: TransferTypeModel;
+  @BelongsTo(() => TransferType)
+  tipoTransferencia: TransferType;
 
-  @ForeignKey(() => AccountModel)
+  @ForeignKey(() => Account)
   @Column
   contaOrigemId: number;
 
-  @BelongsTo(() => AccountModel, 'contaOrigemId')
-  contaOrigem: AccountModel;
+  @BelongsTo(() => Account, 'contaOrigemId')
+  contaOrigem: Account;
 
-  @ForeignKey(() => AccountModel)
+  @ForeignKey(() => Account)
   @Column
   contaDestinoId: number;
 
-  @BelongsTo(() => AccountModel, 'contaDestinoId')
-  contaDestino: AccountModel;
+  @BelongsTo(() => Account, 'contaDestinoId')
+  contaDestino: Account;
 
   @Column
   saldo: number;

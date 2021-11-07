@@ -2,21 +2,21 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateSlipDto } from './dto/create-slip.dto';
 import { UpdateSlipDto } from './dto/update-slip.dto';
-import { SlipModel } from './slip.model';
+import { Slip } from './slip.model';
 
 @Injectable()
 export class SlipsService {
   constructor(
-    @InjectModel(SlipModel)
-    private slipModel: typeof SlipModel,
+    @InjectModel(Slip)
+    private slip: typeof Slip,
   ) { }
 
-  async create(createSlipDto: CreateSlipDto): Promise<SlipModel> {
-    return this.slipModel.create(createSlipDto);
+  async create(createSlipDto: CreateSlipDto): Promise<Slip> {
+    return this.slip.create(createSlipDto);
   }
 
-  async findAll(): Promise<SlipModel[] | String> {
-    let slipList = await this.slipModel.findAll({
+  async findAll(): Promise<Slip[] | String> {
+    let slipList = await this.slip.findAll({
       order: ['id'],
     });
 
@@ -27,8 +27,8 @@ export class SlipsService {
     }
   }
 
-  async findOne(id: number): Promise<SlipModel | String> {
-    let slipExists = await this.slipModel.findOne({
+  async findOne(id: number): Promise<Slip | String> {
+    let slipExists = await this.slip.findOne({
       where: {
         id: id
       }
@@ -41,8 +41,8 @@ export class SlipsService {
     }
   }
 
-  async update(id: number, updateSlipDto: UpdateSlipDto): Promise<SlipModel | String> {
-    let slipExists = await this.slipModel.findOne({
+  async update(id: number, updateSlipDto: UpdateSlipDto): Promise<Slip | String> {
+    let slipExists = await this.slip.findOne({
       where: {
         id: id
       }
@@ -56,7 +56,7 @@ export class SlipsService {
   }
 
   async delete(id: number): Promise<void | String> {
-    const slipExists = await this.slipModel.findOne({
+    const slipExists = await this.slip.findOne({
       where: {
         id: id
       }

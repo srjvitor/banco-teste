@@ -1,5 +1,5 @@
 import { Controller, Param, Get, Post, Put, Delete, Body, ValidationPipe } from '@nestjs/common';
-import { AccountModel } from "./account.model";
+import { Account } from "./account.model";
 import { AccountsService } from './accounts.service'
 import { CreateAccountDto } from './dto/create-account.dto'
 import { UpdateAccountDto } from './dto/update-account.dto'
@@ -9,12 +9,12 @@ export class AccountsController {
   constructor(private accountsService: AccountsService) { }
 
   @Post()
-  async create(@Body() createAccountDto: CreateAccountDto): Promise<AccountModel> {
+  async create(@Body() createAccountDto: CreateAccountDto): Promise<Account | String> {
     return this.accountsService.create(createAccountDto);
   }
 
   @Get()
-  async findAll(): Promise<AccountModel[] | String> {
+  async findAll(): Promise<Account[] | String> {
     return this.accountsService.findAll();
   }
 

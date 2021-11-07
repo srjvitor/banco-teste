@@ -1,7 +1,7 @@
 import { Controller, Param, Delete, Get, Post, Body, Put } from '@nestjs/common';
 import { CreateSlipDto } from './dto/create-slip.dto';
 import { UpdateSlipDto } from './dto/update-slip.dto';
-import { SlipModel } from './slip.model';
+import { Slip } from './slip.model';
 import { SlipsService } from './slips.service';
 
 @Controller('boletos')
@@ -14,7 +14,7 @@ export class SlipsController {
   }
 
   @Get()
-  async findAll(): Promise<SlipModel[] | String> {
+  async findAll(): Promise<Slip[] | String> {
     return this.slipsService.findAll();
   }
 

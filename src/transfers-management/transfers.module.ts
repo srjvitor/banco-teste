@@ -4,11 +4,11 @@ import { SequelizeModule } from '@nestjs/sequelize'
 import { AccountsModule } from 'src/accounts-management/accounts.module';
 import { TransfersController } from './transfers/transfers.controller';
 import { TransfersService } from './transfers/transfers.service';
-import { TransferModel } from "./transfers/transfer.model";
-import { TransferTypeModel } from "./transfer-types/transfer-type.model";
+import { Transfer } from "./transfers/transfer.model";
+import { TransferType } from "./transfer-types/transfer-type.model";
 
 @Module({
-  imports: [SequelizeModule.forFeature([TransferModel, TransferTypeModel]), AccountsModule],
+  imports: [SequelizeModule.forFeature([Transfer, TransferType]), AccountsModule],
   controllers: [TransfersController],
   providers: [TransfersService]
 })

@@ -1,27 +1,40 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { TransferModel } from "src/transfers-management/transfers/transfer.model";
-import { TransferTypeModel } from "src/transfers-management/transfer-types/transfer-type.model";
-import { ClientModel } from '../clients/client.model';
-import { AccountModel } from "./account.model";
+import { Transfer } from "src/transfers-management/transfers/transfer.model";
+import { TransferType } from "src/transfers-management/transfer-types/transfer-type.model";
+import { Client } from '../clients/client.model';
+import { Account } from "./account.model";
 import { CreateAccountDto } from './dto/create-account.dto'
 import { UpdateAccountDto } from './dto/update-account.dto'
 
 @Injectable()
 export class AccountsService {
   constructor(
-    @InjectModel(AccountModel)
-    private accountModel: typeof AccountModel,
+    @InjectModel(Account)
+    private account: typeof Account,
+
+    @InjectModel(Client)
+    private client: typeof Client,
   ) { }
 
-  async create(createAccountDto: CreateAccountDto): Promise<AccountModel> {
-    return this.accountModel.create(createAccountDto);
+  async create(createAccountDto: CreateAccountDto): Promise<Account | String>{
+    let accountExists = await this.client.findOne({
+      where: {
+        id: createAccountDto.clienteId
+      }
+    });
+
+    if (!accountExists) {
+      return 'Id de cliente inválido.'
+    }
+
+    return this.account.create(createAccountDto);
   }
 
-  async findAll(): Promise<AccountModel[] | String> {
-    let accounts = await this.accountModel.findAll({
+  async findAll(): Promise<Account[] | String> {
+    let accounts = await this.account.findAll({
       order: ['id'],
-      include: [ClientModel]
+      include: [Client]
     });
 
     if (accounts.length) {
@@ -31,25 +44,25 @@ export class AccountsService {
     }
   }
 
-  async findOne(id: number): Promise<AccountModel | String> {
-    let account = await this.accountModel.findOne({
+  async findOne(id: number): Promise<Account | String> {
+    let account = await this.account.findOne({
       where: {
         id: id
       },
       include: [
-        ClientModel,
+        Client,
         {
-          model: TransferModel,
+          model: Transfer,
           as: 'transferenciasEfetuadas',
           include: [
-            TransferTypeModel
+            TransferType
           ]
         },
         {
-          model: TransferModel,
+          model: Transfer,
           as: 'transferenciasRecebidas',
           include: [
-            TransferTypeModel
+            TransferType
           ]
         }
       ]
@@ -62,8 +75,8 @@ export class AccountsService {
     }
   }
 
-  async update(id: number, updateAccountDto: UpdateAccountDto): Promise<AccountModel | String> {
-    let account = await this.accountModel.findOne({
+  async update(id: number, updateAccountDto: UpdateAccountDto): Promise<Account | String> {
+    let account = await this.account.findOne({
       where: {
         id: id
       }
@@ -77,7 +90,7 @@ export class AccountsService {
   }
 
   async delete(id: number): Promise<void | String> {
-    const acccount = await this.accountModel.findOne({
+    const acccount = await this.account.findOne({
       where: {
         id: id
       }

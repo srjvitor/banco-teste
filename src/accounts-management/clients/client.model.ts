@@ -1,9 +1,9 @@
 import { Column, CreatedAt, DeletedAt, HasMany, Model, Table, UpdatedAt, NotEmpty } from 'sequelize-typescript';
-import { AccountModel } from "../accounts/account.model";
+import { Account } from "../accounts/account.model";
 
 @Table
-export class ClientModel extends Model {
-  
+export class Client extends Model {
+
   @NotEmpty
   @Column
   nome: string;
@@ -40,6 +40,6 @@ export class ClientModel extends Model {
   @DeletedAt
   deletedAt: Date;
 
-  @HasMany(() => AccountModel)
-  contas: AccountModel[]
+  @HasMany(() => Account)
+  contas: Account[]
 }

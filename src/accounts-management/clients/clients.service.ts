@@ -1,25 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { AccountModel } from '../accounts/account.model';
-import { ClientModel } from './client.model';
+import { Account } from '../accounts/account.model';
+import { Client } from './client.model';
 import { CreateClientDto } from './dto/create-client.dto'
 import { UpdateClientDto } from './dto/update-client.dto'
 
 @Injectable()
 export class ClientsService {
   constructor(
-    @InjectModel(ClientModel)
-    private clientModel: typeof ClientModel,
+    @InjectModel(Client)
+    private client: typeof Client,
   ) { }
 
-  async create(createClientDto: CreateClientDto): Promise<ClientModel> {
-    return this.clientModel.create(createClientDto);
+  async create(createClientDto: CreateClientDto): Promise<Client> {
+    return this.client.create(createClientDto);
   }
 
-  async findAll(): Promise<ClientModel[] | String> {
-    let clients = await this.clientModel.findAll({
+  async findAll(): Promise<Client[] | String> {
+    let clients = await this.client.findAll({
       order: ['id'],
-      include: [AccountModel]
+      include: [Account]
     });
 
     if (clients.length) {
@@ -29,12 +29,12 @@ export class ClientsService {
     }
   }
 
-  async findOne(id: number): Promise<ClientModel | String> {
-    let client = await this.clientModel.findOne({
+  async findOne(id: number): Promise<Client | String> {
+    let client = await this.client.findOne({
       where: {
         id: id
       },
-      include: [AccountModel]
+      include: [Account]
     });
 
     if (client) {
@@ -44,8 +44,8 @@ export class ClientsService {
     }
   }
 
-  async update(id: number, updateClientDto: UpdateClientDto): Promise<ClientModel | String> {
-    let client = await this.clientModel.findOne({
+  async update(id: number, updateClientDto: UpdateClientDto): Promise<Client | String> {
+    let client = await this.client.findOne({
       where: {
         id: id
       }
@@ -59,7 +59,7 @@ export class ClientsService {
   }
 
   async delete(id: number): Promise<void | String> {
-    const client = await this.clientModel.findOne({
+    const client = await this.client.findOne({
       where: {
         id: id
       }

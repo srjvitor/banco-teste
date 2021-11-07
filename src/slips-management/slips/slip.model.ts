@@ -1,6 +1,6 @@
 import { Column, CreatedAt, DeletedAt, Model, Table, UpdatedAt, NotEmpty } from 'sequelize-typescript';
 @Table
-export class SlipModel extends Model {
+export class Slip extends Model {
 
   @NotEmpty
   @Column

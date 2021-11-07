@@ -54,3 +54,89 @@ $ npx sequelize-cli db:seed:all
 # development
 $ npm run start
 ```
+
+## Rotas
+
+```bash
+## Clientes
+
+Cadastro de cliente - [POST] /clientes
+
+{
+  "nome": string,
+	"cpf": string,
+	"dataNascimento": Date,
+	"nomePai": string | null,
+	"nomeMae": string,
+	"cidade": string,
+	"estado": string
+}
+
+Lista de todos os clientes - [GET] /clientes
+
+Listagem única de cliente com conta associada - [GET]: /clientes/{idCliente: number}
+
+Atualização de dados de cliente - [PUT]: /clientes/{idCliente: number}
+
+{
+  "nome": string (Opcional),
+	"cpf": string (Opcional),
+	"dataNascimento": Date (Opcional),
+	"nomePai": string | null (Opcional),
+	"nomeMae": string (Opcional),
+	"cidade": string (Opcional),
+	"estado": string (Opcional)
+}
+
+Exclusão de cadastro de cliente - [Delete]: /clientes/{idCliente: number}
+
+```
+
+```bash
+## Contas
+
+Cadastro de conta - [POST] /contas
+
+{
+	"clienteId": number,
+  "banco": string,
+  "agencia": string,
+  "conta": string,
+  "saldo": string
+}
+
+Lista de contas cadastradas - [GET] /contas
+
+Listagem única de conta e transferências - [GET]: /contas/{idConta: number}
+
+Atualização de dados de conta - [PUT]: /contas/{idConta: number}
+
+{
+	"clienteId": number (Opcional),
+  "banco": string (Opcional),
+  "agencia": string (Opcional),
+  "conta": string (Opcional)
+}
+
+Exclusão de conta - [Delete]: /contas/{idConta: number}
+
+```
+
+```bash
+## Transferências
+
+Cadastro de transferência - [POST] /transferencias
+
+Tipos de transferências
+1. Transferências entre contas
+2. Deposito em conta
+3. Deposito teste
+
+{
+	"tipoTransferenciaId": number,
+	"contaOrigemId": number (null em caso de depositos),
+  "contaDestinoId": number,
+  "saldo": string
+}
+
+```
