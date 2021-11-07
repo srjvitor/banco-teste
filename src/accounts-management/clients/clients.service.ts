@@ -1,25 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Account } from '../accounts/account.model';
-import { Client } from './client.model';
+import { AccountModel } from '../accounts/account.model';
+import { ClientModel } from './client.model';
 import { CreateClientDto } from './dto/create-client.dto'
 import { UpdateClientDto } from './dto/update-client.dto'
 
 @Injectable()
 export class ClientsService {
   constructor(
-    @InjectModel(Client)
-    private clientModel: typeof Client,
+    @InjectModel(ClientModel)
+    private clientModel: typeof ClientModel,
   ) { }
 
-  async create(createClientDto: CreateClientDto): Promise<Client> {
+  async create(createClientDto: CreateClientDto): Promise<ClientModel> {
     return this.clientModel.create(createClientDto);
   }
 
-  async findAll(): Promise<Client[] | String> {
+  async findAll(): Promise<ClientModel[] | String> {
     let clients = await this.clientModel.findAll({
       order: ['id'],
-      include: [Account]
+      include: [AccountModel]
     });
 
     if (clients.length) {
@@ -29,12 +29,12 @@ export class ClientsService {
     }
   }
 
-  async findOne(id: number): Promise<Client | String> {
+  async findOne(id: number): Promise<ClientModel | String> {
     let client = await this.clientModel.findOne({
       where: {
         id: id
       },
-      include: [Account]
+      include: [AccountModel]
     });
 
     if (client) {
@@ -44,7 +44,7 @@ export class ClientsService {
     }
   }
 
-  async update(id: number, updateClientDto: UpdateClientDto): Promise<Client | String> {
+  async update(id: number, updateClientDto: UpdateClientDto): Promise<ClientModel | String> {
     let client = await this.clientModel.findOne({
       where: {
         id: id
@@ -52,7 +52,7 @@ export class ClientsService {
     });
 
     if (client) {
-      return client.update(UpdateClientDto)
+      return client.update(updateClientDto)
     } else {
       return "Falha ao atualizar cliente, conta não localizada."
     }

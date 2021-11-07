@@ -1,5 +1,5 @@
 import { Controller, Param, Get, Post, Put, Delete, Body } from '@nestjs/common';
-import { Client } from './client.model';
+import { ClientModel } from './client.model';
 import { ClientsService } from './clients.service'
 import { CreateClientDto } from './dto/create-client.dto'
 import { UpdateClientDto } from './dto/update-client.dto'
@@ -14,7 +14,7 @@ export class ClientsController {
   }
 
   @Get()
-  async findAll(): Promise<Client[] | String> {
+  async findAll(): Promise<ClientModel[] | String> {
     return this.clientsService.findAll();
   }
 
