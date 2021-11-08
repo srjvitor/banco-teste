@@ -155,26 +155,26 @@ Tipos de transferências
 Cadastro de boleto - [POST] /boletos
 
 {
-  "banco": string; # ex: "123"
-  "localPagamento": string; # ex: "Pagável em qualquer agência bancária"
-  "agenciaCedente": string; # ex: "0011"
-  "codigoCedente": string; # ex: "123456789"
-  "numeroDocumento": string; # ex: "123456789123"
-  "codMoeda": string; # ex: "9"
-  "especie": string; # ex: "DM"
-  "aceite": string; # ex: "Não" 
-  "dataProcessamento": string; ## ex: "2021-12-07"
-  "carteira": string; # ex: "1"
-  "especieMoeda": string; # ex: "R$"
-  "vencimento": string; # ex: "2021-07-22"
-  "valordocumento": number; # ex: 100.00 (sem aspas duplas)
-  "instrucoes": string; # ex: "Após vencimento cobrar juros de 0,033% ao dia."
-	"descricao": string; # ex: "Após vencimento cobrar juros de 0,033% ao dia."
-  "sacado": string; # ex: "Usuário 1"
-  "usoBanco": string (Opcional);
-  "mensagem1": string (Opcional);
-  "mensagem2": string (Opcional);
-  "mensagem3": string (Opcional);
+  "banco": string, # ex: "123"
+  "localPagamento": string, # ex: "Pagável em qualquer agência bancária"
+  "agenciaCedente": string, # ex: "0011"
+  "codigoCedente": string, # ex: "123456789"
+  "numeroDocumento": string, # ex: "123456789123"
+  "codMoeda": string, # ex: "9"
+  "especie": string, # ex: "DM"
+  "aceite": string, # ex: "Não" 
+  "dataProcessamento": string, ## ex: "2021-12-07"
+  "carteira": string, # ex: "1"
+  "especieMoeda": string, # ex: "R$"
+  "vencimento": string, # ex: "2021-07-22"
+  "valordocumento": number, # ex: 100.00 (sem aspas duplas)
+  "instrucoes": string, # ex: "Após vencimento cobrar juros de 0,033% ao dia."
+	"descricao": string, # ex: "Após vencimento cobrar juros de 0,033% ao dia."
+  "sacado": string, # ex: "Usuário 1"
+  "usoBanco": string (Opcional),
+  "mensagem1": string (Opcional),
+  "mensagem2": string (Opcional),
+  "mensagem3": string (Opcional)
 }
 
 Listagem de boletos cadastrados - [GET] /boletos
