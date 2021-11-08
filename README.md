@@ -64,6 +64,8 @@ $ npm run start
 
 ## Rotas
 
+(OBS) Estarei adicionando um arquivo (Insomnia_routes.json) na raiz do projeto, com as rotas, somente no ponto de importar para o Insomnia.
+
 ```bash
 ## Clientes
 
