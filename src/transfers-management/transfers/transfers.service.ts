@@ -74,10 +74,18 @@ export class TransfersService {
         break;
 
       case 3:
-        var saldoDestino = parseFloat('00.01');
-        saldoDestino = saldoDestino + saldoTransferencia;
+        var saldoDestino = parseFloat(contaDestino.saldo);
+        saldoDestino += parseFloat('00.01');
         contaDestino.saldo = saldoDestino.toString();
-        break;
+
+        await contaDestino.save()
+
+        return this.transfer.create({
+          tipoTransferenciaId: createTransferDto.tipoTransferenciaId,
+          contaDestinoId: createTransferDto.contaDestinoId,
+          saldo: parseFloat('0.01')
+        });
+
     }
 
     return this.transfer.create(createTransferDto);

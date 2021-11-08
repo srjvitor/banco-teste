@@ -6,9 +6,6 @@ export class Slip extends Model {
   @Column
   linhaDigitavel: string;
 
-  @Column
-  descricao: string;
-
   @NotEmpty
   @Column
   banco: string;
@@ -26,6 +23,10 @@ export class Slip extends Model {
 
   @NotEmpty
   @Column
+  codigoMoeda: string;
+
+  @NotEmpty
+  @Column
   numeroDocumento: string;
 
   @Column
@@ -37,6 +38,10 @@ export class Slip extends Model {
   @NotEmpty
   @Column
   dataProcessamento: string;
+
+  @NotEmpty
+  @Column
+  dataDocumento: string;
 
   @Column
   usoBanco: string;
@@ -54,7 +59,7 @@ export class Slip extends Model {
 
   @NotEmpty
   @Column
-  valordocumento: string;
+  valorDocumento: number;
 
   @Column
   instrucoes: string;

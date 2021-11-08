@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString, IsNumber } from 'class-validator';
 
 export class UpdateSlipDto {
   @IsString()
@@ -32,6 +32,10 @@ export class UpdateSlipDto {
   @IsString()
   @IsOptional()
   readonly dataProcessamento: string;
+
+  @IsNumber()
+  @IsOptional()
+  readonly valorDocumento: string;
 
   @IsString()
   @IsOptional()

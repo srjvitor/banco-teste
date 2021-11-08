@@ -1,6 +1,7 @@
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, Length, IsNumber } from 'class-validator';
 
 export class CreateSlipDto {
+  @Length(3, 3)
   @IsString()
   @IsNotEmpty()
   readonly banco: string;
@@ -9,6 +10,7 @@ export class CreateSlipDto {
   @IsNotEmpty()
   readonly localPagamento: string;
 
+  @Length(4, 4)
   @IsString()
   @IsNotEmpty()
   readonly agenciaCedente: string;
@@ -16,6 +18,11 @@ export class CreateSlipDto {
   @IsString()
   @IsNotEmpty()
   readonly codigoCedente: string;
+
+  @Length(1, 1)
+  @IsString()
+  @IsNotEmpty()
+  readonly codigoMoeda: string;
 
   @IsString()
   @IsNotEmpty()
@@ -31,10 +38,10 @@ export class CreateSlipDto {
 
   @IsString()
   @IsNotEmpty()
-  readonly dataProcessamento: string;
+  readonly dataDocumento: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   readonly usoBanco: string;
 
   @IsString()
@@ -49,9 +56,9 @@ export class CreateSlipDto {
   @IsNotEmpty()
   readonly vencimento: string;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
-  readonly valordocumento: string;
+  readonly valorDocumento: string;
 
   @IsString()
   @IsNotEmpty()

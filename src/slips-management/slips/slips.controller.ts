@@ -18,18 +18,8 @@ export class SlipsController {
     return this.slipsService.findAll();
   }
 
-  @Get(':id')
-  FindOne(@Param('id') id: number) {
-    return this.slipsService.findOne(id);
-  }
-
-  @Put(':id')
-  update(@Param('id') id: number, @Body() updateSlipDto: UpdateSlipDto) {
-    return this.slipsService.update(id, updateSlipDto);
-  }
-
-  @Delete(':id')
-  delete(@Param('id') id: number) {
-    return this.slipsService.delete(id);
+  @Get()
+  FindOne(@Body() linhaDigitavel: number) {
+    return this.slipsService.findOne(linhaDigitavel);
   }
 }

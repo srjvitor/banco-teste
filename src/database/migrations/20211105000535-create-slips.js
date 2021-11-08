@@ -10,7 +10,8 @@ module.exports = {
       },
       linhaDigitavel: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true
       },
       banco: {
         allowNull: false,
@@ -25,6 +26,10 @@ module.exports = {
         type: Sequelize.STRING
       },
       codigoCedente: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      codigoMoeda: {
         allowNull: false,
         type: Sequelize.STRING
       },
@@ -62,7 +67,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      valordocumento: {
+      valorDocumento: {
         allowNull: false,
         type: Sequelize.DECIMAL(10, 2) 
       },

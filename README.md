@@ -48,6 +48,13 @@ Navegue até a pasta "src/database" e rode o comando abaixo
 $ npx sequelize-cli db:seed:all
 ```
 
+## Configurar as credenciais do banco
+```bash
+Abra o arquivo app.module.ts e altere suas credenciais de acesso caso necessite
+
+username: 'postgres',
+password: '123',
+```
 ## Rodando a aplicação
 
 ```bash
@@ -136,7 +143,7 @@ Tipos de transferências
   "tipoTransferenciaId": number,
   "contaOrigemId": number (null em caso de depositos),
   "contaDestinoId": number,
-  "saldo": string
+  "saldo": number # ex 100.00 (sem aspas duplas)
 }
 
 ```
@@ -146,19 +153,34 @@ Tipos de transferências
 Cadastro de boleto - [POST] /boletos
 
 {
-  "tipoTransferenciaId": number,
-  "contaOrigemId": number (null em caso de depositos),
-  "contaDestinoId": number,
-  "saldo": string
+  "banco": string; # ex: "123"
+  "localPagamento": string; # ex: "Pagável em qualquer agência bancária"
+  "agenciaCedente": string; # ex: "0011"
+  "codigoCedente": string; # ex: "123456789"
+  "numeroDocumento": string; # ex: "123456789123"
+  "codMoeda": string; # ex: "9"
+  "especie": string; # ex: "DM"
+  "aceite": string; # ex: "Não" 
+  "dataProcessamento": string; ## ex: "2021-12-07"
+  "carteira": string; # ex: "1"
+  "especieMoeda": string; # ex: "R$"
+  "vencimento": string; # ex: "2021-07-22"
+  "valordocumento": number; # ex: 100.00 (sem aspas duplas)
+  "instrucoes": string; # ex: "Após vencimento cobrar juros de 0,033% ao dia."
+	"descricao": string; # ex: "Após vencimento cobrar juros de 0,033% ao dia."
+  "sacado": string; # ex: "Usuário 1"
+  "usoBanco": string (Opcional);
+  "mensagem1": string (Opcional);
+  "mensagem2": string (Opcional);
+  "mensagem3": string (Opcional);
 }
 
-Consulta de boleto - [GET] /boletos
+Listagem de boletos cadastrados - [GET] /boletos
+
+Consulta individual de boleto - [GET] /boleto
 
 {
-  "tipoTransferenciaId": number,
-  "contaOrigemId": number (null em caso de depositos),
-  "contaDestinoId": number,
-  "saldo": string
+  "linhaDigitavel": number # ex: 12391531004960937603605249310086890000010000
 }
 
 ```

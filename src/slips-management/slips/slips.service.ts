@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { CreateSlipDto } from './dto/create-slip.dto';
 import { UpdateSlipDto } from './dto/update-slip.dto';
 import { Slip } from './slip.model';
+import * as moment from 'moment';
 
 @Injectable()
 export class SlipsService {
@@ -12,7 +13,41 @@ export class SlipsService {
   ) { }
 
   async create(createSlipDto: CreateSlipDto): Promise<Slip> {
-    return this.slip.create(createSlipDto);
+
+    // Campo 1
+    let codBancoDestinatario = createSlipDto.banco;
+    let codMoeda = createSlipDto.codigoMoeda; // Real
+    let posicoes20a24codBarras = this.conjuntoDeNumeroAleatorios(5); // 5 digitos
+    let digVerificadorCampo1 = '0';
+    let campo1 = codBancoDestinatario + codMoeda + posicoes20a24codBarras + digVerificadorCampo1;
+
+    // Campo 2
+    let posicoes25a34codBarras = this.conjuntoDeNumeroAleatorios(10); // 10 digitos
+    let digVerificadorCampo2 = '0';
+    let campo2 = posicoes25a34codBarras + digVerificadorCampo2;
+
+    // Campo 3
+    let posicoes35a44codBarras = this.conjuntoDeNumeroAleatorios(10); // 10 digitos
+    let digVerificadorCampo3 = '0';
+    let campo3 = posicoes35a44codBarras + digVerificadorCampo3;
+
+    // Campo 4
+    let digVerificadorCampo4 = '0';
+    let campo4 = digVerificadorCampo4;
+
+    // Campo 5
+    let fatorVencimento = this.calculoFatorVencimento(createSlipDto.vencimento);
+    let valorBoletodePagamento = this.addZerosAesquerda(createSlipDto.valorDocumento, 10); // 10 digitos
+    let campo5 = fatorVencimento + valorBoletodePagamento;
+
+    let dataProcessamento = moment().format('YYYY-MM-DD');
+    let linhaDigitavel = campo1 + campo2 + campo3 + campo4 + campo5;
+
+    return this.slip.create({
+      dataProcessamento,
+      linhaDigitavel,
+      ...createSlipDto
+    });
   }
 
   async findAll(): Promise<Slip[] | String> {
@@ -27,10 +62,10 @@ export class SlipsService {
     }
   }
 
-  async findOne(id: number): Promise<Slip | String> {
+  async findOne(linhaDigitavel: number): Promise<Slip | String> {
     let slipExists = await this.slip.findOne({
       where: {
-        id: id
+        linhaDigitavel
       }
     });
 
@@ -41,32 +76,87 @@ export class SlipsService {
     }
   }
 
-  async update(id: number, updateSlipDto: UpdateSlipDto): Promise<Slip | String> {
-    let slipExists = await this.slip.findOne({
-      where: {
-        id: id
-      }
-    });
+  addZerosAesquerda(num, len) {
 
-    if (slipExists) {
-      return slipExists.update(updateSlipDto);
-    } else {
-      return "Falha ao atualizar boleto, boleto não localizado."
+    let valorBoleto = num.toString()
+
+    // replace para retirar '.' e ',' do valor do boleto
+    var numberWithZeroes = String(valorBoleto.replace(/[^0-9]/g, ''));
+    var counter = numberWithZeroes.length;
+
+    while (counter < len) {
+
+      numberWithZeroes = "0" + numberWithZeroes;
+
+      counter++;
+
     }
+
+    return numberWithZeroes;
   }
 
-  async delete(id: number): Promise<void | String> {
-    const slipExists = await this.slip.findOne({
-      where: {
-        id: id
-      }
-    });
+  conjuntoDeNumeroAleatorios(tamanho) {
+    let contador = 1;
+    let numeroAleatorio = '';
 
-    if (slipExists) {
-      await slipExists.destroy();
-      return "Boleto excluído com sucesso."
-    } else {
-      return "Falha ao excluir boleto, boleto não foi localizado."
+    while (contador < tamanho) {
+      numeroAleatorio += Math.floor(Math.random() * 10).toString()
+      contador++;
+    }
+
+    return numeroAleatorio;
+  }
+
+  calculoFatorVencimento(dataVencimento) {
+
+    // Para calcular dias de vencimento desde a data base do Banco Central
+    var start = moment(dataVencimento, "YYYY-MM-DD");
+    var end = moment("1997-10-07", "YYYY-MM-DD");
+
+    // Campo 5
+    let fatorVencimento = moment.duration(start.diff(end)).asDays();
+
+    return fatorVencimento
+  }
+
+  calculoLinhaDigitavel(): void {
+
+    function calculoDigitoVerificadorCodBarras(numero: string): number {
+
+      const arrayReverso = numero.split('').reverse()
+
+      const arrayMultiplicacao = [2, 3, 4, 5, 6, 7, 8, 9]
+
+      let somatoria = 0;
+      let posicaoMultiplicacaoArray = 0;
+
+      for (const index in arrayReverso) {
+
+        if (parseInt(index) != 5) {
+          somatoria += parseInt(arrayReverso[index]) * arrayMultiplicacao[posicaoMultiplicacaoArray];
+
+          if (posicaoMultiplicacaoArray == arrayMultiplicacao.length - 1) {
+            posicaoMultiplicacaoArray = 0
+          } else {
+            posicaoMultiplicacaoArray++
+          }
+        }
+      }
+
+      let modulo11 = somatoria % 11;
+      let subtracao = 11 - modulo11;
+
+      switch (subtracao) {
+        case 0:
+          return 1;
+        case 10:
+          return 1;
+        case 11:
+          return 1;
+        case 10 || 11:
+          return subtracao;
+      }
+
     }
   }
 }
